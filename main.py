@@ -1,5 +1,5 @@
 import sqlite3
-from flask import Flask, g
+from flask import Flask, g, redirect, url_for
 from contextlib import closing
 from admin import admin
 
@@ -29,12 +29,13 @@ def teardown_request(exception):
     if db is not None:
         db.close()
 
+app.register_blueprint(admin, url_prefix='/admin/')
+
 
 @app.route('/')
 def show_blog():
-    return "foo"
+    return redirect(url_for('admin.show_admin_menu'))
 
-app.register_blueprint(admin, url_prefix='/admin/')
 
 if __name__ == '__main__':
     app.run()
