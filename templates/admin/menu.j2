@@ -6,17 +6,25 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/6.1.1/foundation.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation-icons/3.0/foundation-icons.min.css">
   </head>
-
   <body>
-    <div class="title-bar" data-responsive-toggle="menu1" data-hide-for="medium">
+    <div class="title-bar" data-responsive-toggle="menu" data-hide-for="medium">
         <button class="menu-icon" type="button" data-toggle></button>
-      <div class="title-bar-title"></div>
+      <div class="title-bar-title">Admin's menu</div>
     </div>
-    <div class="top-bar" id="menu1">
+    <div class="top-bar" id="menu">
       <div class="top-bar-left">
         <ul class="dropdown menu" data-dropdown-menu>
-          <li><a href="/"><i class="fi-die-four"></i></a></li>
-          <li><a href="/">foo</a></li>
+          <li><a href="{{ url_for('admin.show_admin_menu') }}"><i class="fi-die-four"></i></a></li>
+          <li {% block settings_link_attributes %}{% endblock %}>
+            <a href="{{url_for('admin.show_admin_settings')}}">Settings</a>
+          </li>
+          <li {% block posts_link_attributes %}{% endblock %}>
+            <a href="{{url_for('admin.show_admin_posts')}}">Posts</a>
+          </li>
+          <li {% block widgets_link_attributes %}{% endblock %}>
+            <a href="{{url_for('admin.show_admin_widgets')}}">Widgets</a>
+          </li>
+          <li><a href="/"></a></li>
         </ul>
       </div>
       <div class="top-bar-right">

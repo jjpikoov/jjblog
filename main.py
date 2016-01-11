@@ -35,6 +35,7 @@ app.register_blueprint(admin, url_prefix='/admin/')
 @app.route('/')
 def show_blog():
     return redirect(url_for('admin.show_admin_menu'))
+    # return render_template('blog.j2')
 
 
 if __name__ == '__main__':
