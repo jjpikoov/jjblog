@@ -21,3 +21,8 @@ def show_admin_widgets():
 @admin.route('settings')
 def show_admin_settings():
     return "Admin settings"
+
+
+@admin.route('logout')
+def logout():
+    return "loggedout"

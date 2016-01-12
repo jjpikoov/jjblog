@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title> {% block title %}Admin's Menu{% endblock %} - {{ config.get('BLOG_NAME', None) }}</title>
+    <title>{% block title %}Admin's Menu{% endblock %} - {{ config.get('BLOG_NAME', None) }}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/6.1.1/foundation.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation-icons/3.0/foundation-icons.min.css">
   </head>
@@ -14,22 +14,55 @@
     <div class="top-bar" id="menu">
       <div class="top-bar-left">
         <ul class="dropdown menu" data-dropdown-menu>
-          <li><a href="{{ url_for('admin.show_admin_menu') }}"><i class="fi-die-four"></i></a></li>
+          <li><button class="button secondary" href="{{ url_for('admin.show_admin_menu') }}"><i class="fi-home"></i></button></li>
           <li {% block settings_link_attributes %}{% endblock %}>
-            <a href="{{url_for('admin.show_admin_settings')}}">Settings</a>
+            <a href="{{url_for('admin.show_admin_settings') }}">Settings</a>
           </li>
           <li {% block posts_link_attributes %}{% endblock %}>
-            <a href="{{url_for('admin.show_admin_posts')}}">Posts</a>
+            <a href="{{url_for('admin.show_admin_posts') }}">Posts</a>
           </li>
           <li {% block widgets_link_attributes %}{% endblock %}>
-            <a href="{{url_for('admin.show_admin_widgets')}}">Widgets</a>
+            <a href="{{ url_for('admin.show_admin_widgets') }}">Widgets</a>
           </li>
-          <li><a href="/"></a></li>
         </ul>
       </div>
       <div class="top-bar-right">
         <ul class="menu">
+          <li>
+            {% if session.logged_in %}
+              <button class="button" type="button" href="{{ url_for('admin.logout') }}"><i class="fi-power"></i> <span>Logout</span></button>
+            {% else %}
+              <button class="button" type="button" data-toggle="login-dropdown"><i class="fi-torso"></i> <span>Login</span></button>
+              <div class="dropdown-pane" id="login-dropdown" data-dropdown data-auto-focus="true">
+                <form action="" method="post">
+                  <div class="row">
+                    <label for="login">Login:
+                      <input type="text" placeholder="Login">
+                    </label>
+                  </div> 
+                  <div class="row">
+                    <label for="password">Password:
+                      <input type="password" placeholder="Password">
+                    </label>
+                  </div>
+                </form>
+              </div>
+            {% endif %}
+          </li>         
         </ul>
+      </div>
+    </div>
+    <div class="row">
+      <div class="small-12 small-centered columns">
+        {% block body %}
+          {% if not session.logged_in %}
+            <h3>Welcome to admin's menu!</h3> 
+            <h6>Please log in in order to work on your blog.</h6>
+          {% else %}
+            <h3>You're logged in!</h3>
+            <h6>Please select proper section in menu.</h6>
+          {% endif %}
+        {% endblock %}
       </div>
     </div>
     <script src="https://cdn.jsdelivr.net/jquery/2.1.4/jquery.min.js"></script>
@@ -39,6 +72,3 @@
     </script>
   </body>
 </html>
-
-   
-
