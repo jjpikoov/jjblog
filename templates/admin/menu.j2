@@ -14,14 +14,14 @@
     <div class="top-bar" id="menu">
       <div class="top-bar-left">
         <ul class="dropdown menu" data-dropdown-menu>
-          <li><button class="button secondary" href="{{ url_for('admin.show_admin_menu') }}"><i class="fi-home"></i></button></li>
-          <li {% block settings_link_attributes %}{% endblock %}>
+          <li><a class="button secondary" href="{{ url_for('admin.show_admin_menu_with_login') }}"><i class="fi-home"></i></a></li>
+          <li {% block settings_menu_item_attributes %}{% endblock %} >
             <a href="{{url_for('admin.show_admin_settings') }}">Settings</a>
           </li>
-          <li {% block posts_link_attributes %}{% endblock %}>
+          <li {% block posts_menu_item_attributes %}{% endblock %} >
             <a href="{{url_for('admin.show_admin_posts') }}">Posts</a>
           </li>
-          <li {% block widgets_link_attributes %}{% endblock %}>
+          <li {% block widgets_menu_item_attributes %}{% endblock %} >
             <a href="{{ url_for('admin.show_admin_widgets') }}">Widgets</a>
           </li>
         </ul>
@@ -30,20 +30,19 @@
         <ul class="menu">
           <li>
             {% if session.logged_in %}
-              <button class="button" type="button" href="{{ url_for('admin.logout') }}"><i class="fi-power"></i> <span>Logout</span></button>
+              <a class="button secondary" href="{{ url_for('admin.logout') }}"><i class="fi-power"></i> <span>Logout</span></a>
             {% else %}
               <button class="button" type="button" data-toggle="login-dropdown"><i class="fi-torso"></i> <span>Login</span></button>
               <div class="dropdown-pane" id="login-dropdown" data-dropdown data-auto-focus="true">
-                <form action="" method="post">
+                <form method="post">
                   <div class="row">
                     <label for="login">Login:
-                      <input type="text" placeholder="Login">
+                      <input type="text" name="login" placeholder="Login">
                     </label>
-                  </div> 
-                  <div class="row">
                     <label for="password">Password:
-                      <input type="password" placeholder="Password">
+                      <input type="password" name="password" placeholder="Password">
                     </label>
+                    <button type="submit" class="button success">Sign in</button>
                   </div>
                 </form>
               </div>
@@ -55,6 +54,12 @@
     <div class="row">
       <div class="small-12 small-centered columns">
         {% block body %}
+          {% if login_failed %}
+            <div class="callout alert">
+              <h5>Login failed!</h5>
+              <p>Wrong login or password.</p>
+            </div>
+          {% endif %}
           {% if not session.logged_in %}
             <h3>Welcome to admin's menu!</h3> 
             <h6>Please log in in order to work on your blog.</h6>
