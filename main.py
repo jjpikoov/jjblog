@@ -1,33 +1,25 @@
-import sqlite3
 from flask import Flask, g, redirect, url_for
-from contextlib import closing
 from admin import admin
+from database import SqliteDatabase
 
 app = Flask(__name__)
 app.config.from_object('config.DevConfig')
 
 
-def connect_db():
-    return sqlite3.connect(app.config['DATABASE'])
-
-
-def init_db():
-    with closing(connect_db()) as db:
-        with app.open_resource('schema.sql', mode='r') as f:
-            db.cursor().executescript(f.read())
-        db.commit()
+database = SqliteDatabase(app.config['DATABASE'])
+database.init_db()
 
 
 @app.before_request
 def before_request():
-    g.db = connect_db()
+    g.db = database
+    g.db.connect_db()
 
 
 @app.teardown_request
 def teardown_request(exception):
     db = getattr(g, 'db', None)
-    if db is not None:
-        db.close()
+    db.close_db()
 
 app.register_blueprint(admin, url_prefix='/admin/')
 

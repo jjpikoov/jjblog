@@ -3,7 +3,10 @@
 {% block posts_menu_item_attributes %}class="menu-text"{% endblock %}
 
 {% block body %}
-  <div class="row">
-    <a class="small expanded button success" href="#">New post</a>
+<div class="row">
+  <div class="medium-3 medium-centered columns">
+    <a class="expanded button" href="{{ url_for('admin.show_new_post_forms') }}">New post</a>
   </div>
+  
+</div>
 {% endblock %}

@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, session,\
-         redirect, url_for
+         redirect, url_for, g
 import functools
 
 admin = Blueprint('admin', __name__)
@@ -69,6 +69,12 @@ def show_admin_menu_with_login():
 @login_required
 def show_admin_posts():
     return render_template('admin/posts.j2')
+
+
+@admin.route('posts/new')
+@login_required
+def show_new_post_forms():
+    return "foo"
 
 
 @admin.route('widgets')

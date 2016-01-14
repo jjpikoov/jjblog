@@ -7,17 +7,6 @@ create table posts (
         text text not null
         );
 
-drop table if exists users;
-create table users (
-        id integer primary key autoincrement,
-        nick text,
-        name text,
-        surname text,
-        email text,
-        password text,
-        country text
-        );
-
 drop table if exists widgets;
 create table widgets (
         id integer primary key autoincrement,
