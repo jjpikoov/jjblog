@@ -14,14 +14,21 @@ def login_required(func):
             else:
                 return func(args)
         else:
+            notification = Notification(
+                    True,
+                    "Login required!",
+                    "Please log in to continue",
+                    'warning')
+            session['notification'] = notification.__dict__
             return redirect(url_for('admin.show_admin_menu_with_login'))
     return checker
 
 
-class AdminNotification():
-    def __init__(self, active, subject, description, color):
+class Notification():
+    def __init__(
+            self, active=False, title=None, description=None, color=None):
         self.active = active
-        self.subject = subject
+        self.title = title
         self.description = description
         self.color = color
 
@@ -34,15 +41,28 @@ def record_params(setup_state):
 
 
 @admin.route('/', methods=['GET', 'POST'])
-def show_admin_menu_with_login():
-    login_failed = False
+def show_admin_menu_with_login(logout=None):
     if request.method == 'POST':
+        notification = Notification()
         if (request.form['login'] != admin.config['USERNAME'] or
                 request.form['password'] != admin.config['PASSWORD']):
-            login_failed = True
+            notification.active = True
+            notification.color = 'alert'
+            notification.title = "Authorization failed!"
+            notification.description = "Wrong login or password."
         else:
             session['logged_in'] = True
-    return render_template('admin/menu.j2', login_failed=login_failed)
+            notification.active = True
+            notification.color = 'success'
+            notification.title = 'Successful authorization!'
+            notification.description = "Welcome my admin."
+        session['notification'] = notification.__dict__
+    if 'notification' in session.keys():
+        notification = session['notification']
+        session.pop('notification', None)
+    else:
+        notification = Notification().__dict__
+    return render_template('admin/menu.j2', notification=notification)
 
 
 @admin.route('posts')
@@ -66,4 +86,10 @@ def show_admin_settings():
 @admin.route('logout')
 def logout():
     session.pop('logged_in', None)
-    return redirect(url_for('admin.show_admin_menu_with_login'))
+    notification = Notification(
+            True,
+            "Successful logout!",
+            "You have successfully logged out.",
+            "secondary")
+    session['notification'] = notification.__dict__
+    return redirect(url_for('admin.show_admin_menu_with_login', logout='true'))
