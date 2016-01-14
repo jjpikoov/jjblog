@@ -41,7 +41,7 @@ def record_params(setup_state):
 
 
 @admin.route('/', methods=['GET', 'POST'])
-def show_admin_menu_with_login(logout=None):
+def show_admin_menu_with_login():
     if request.method == 'POST':
         notification = Notification()
         if (request.form['login'] != admin.config['USERNAME'] or
@@ -92,4 +92,4 @@ def logout():
             "You have successfully logged out.",
             "secondary")
     session['notification'] = notification.__dict__
-    return redirect(url_for('admin.show_admin_menu_with_login', logout='true'))
+    return redirect(url_for('admin.show_admin_menu_with_login'))
