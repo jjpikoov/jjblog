@@ -1,7 +1,6 @@
 drop table if exists posts;
 create table posts (
         id integer primary key autoincrement,
-        author text not null,
         date date,
         title text not null,
         text text not null

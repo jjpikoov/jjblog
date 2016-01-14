@@ -74,7 +74,7 @@ def show_admin_posts():
 @admin.route('posts/new')
 @login_required
 def show_new_post_forms():
-    return "foo"
+    return render_template('admin/new_post.j2')
 
 
 @admin.route('widgets')
