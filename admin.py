@@ -1,3 +1,4 @@
+import datetime
 from flask import Blueprint, render_template, request, session,\
          redirect, url_for, g
 import functools
@@ -32,8 +33,14 @@ class Notification():
         self.description = description
         self.color = color
 
-def check_date(day, month, year):
-    pass
+
+def validate_date(day, month, year):
+    try:
+        datetime.datetime(int(year), int(month), int(day))
+    except:
+        return False
+    return True
+
 
 
 @admin.record
@@ -74,13 +81,22 @@ def show_admin_posts():
     return render_template('admin/posts.j2')
 
 
-@admin.route('posts/new', methods=['GET' 'POST'])
+@admin.route('posts/new', methods=['GET', 'POST'])
 @login_required
 def show_new_post_forms():
-#     if request.method == 'POST':
-#         g.db.add_post(
-#                 request.form['title'],
-#                 request.form[''])
+    if request.method == 'POST':
+        day = request.form['day'],
+        month = request.form['month'],
+        year = request.form['year']
+        if validate_date(day, month, year):
+            date = day + "." + month + "." + year
+            g.db.add_post(
+                request.form['title'],
+                date,
+                request._form['text'])
+            return url_for('admin.show_admin_posts')
+        else:
+            pass
     return render_template('admin/new_post.j2')
 
 
