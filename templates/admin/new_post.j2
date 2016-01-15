@@ -4,25 +4,27 @@
   <div class="row">
     <fieldset class="small-12 medium-8 medium-centered columns fieldset">
       <legend>NEW POST</legend>
-      <label for="title">Title
-        <input type="text" name="title" placeholder="Post title"></input>
-      </label>
-      <fieldset class="fieldset">
-        <legend>Date</legend>
-          <label for="day">Day
-            <input type="number" name="day" min="1" max="31">
-          </label> 
-          <label for="month">Month
-            <input type="number" name="month" min="1" max="12">
-          </label> 
-          <label for="year">Year
-            <input type="number" name="year" min="2015" max="9999">
-          </label> 
-      </fieldset>
-      <label for="text">Text
-        <textarea name="text" rows="8" cols="40"></textarea>
-      </label>
-      <button class="success expanded button" type="submit">Create</button>
+      <form method="post">
+        <label for="title">Title
+          <input type="text" name="title" placeholder="Post title"></input>
+        </label>
+        <fieldset class="fieldset">
+          <legend>Date</legend>
+            <label for="day">Day
+              <input type="number" name="day" min="1" max="31">
+            </label> 
+            <label for="month">Month
+              <input type="number" name="month" min="1" max="12">
+            </label> 
+            <label for="year">Year
+              <input type="number" name="year" min="2015" max="9999">
+            </label> 
+        </fieldset>
+        <label for="text">Text
+          <textarea name="text" rows="8" cols="40"></textarea>
+        </label>
+        <button class="success expanded button" type="submit">Create</button>
+      </form>
     </fieldset>
   </div>
 {% endblock %}

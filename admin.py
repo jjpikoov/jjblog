@@ -30,7 +30,8 @@ def throw_notification_once(func):
             retval = func()
         else:
             retval = func(args)
-        session['notification_active'] = False
+        if type(retval).__name__ == "unicode":
+            session['notification_active'] = False
         return retval
     return wrapper
 
@@ -64,26 +65,36 @@ def show_admin_menu_with_login():
 
 @admin.route('posts')
 @login_required
+@throw_notification_once
 def show_admin_posts():
     return render_template('admin/posts.j2')
 
 
 @admin.route('posts/new', methods=['GET', 'POST'])
 @login_required
+@throw_notification_once
 def show_new_post_forms():
     if request.method == 'POST':
-        day = request.form['day'],
-        month = request.form['month'],
-        year = request.form['year']
+        day = int(request.form['day'])
+        month = int(request.form['month'])
+        year = int(request.form['year'])
         if validate_date(day, month, year):
-            date = day + "." + month + "." + year
+            date = str(day) + "." + str(month) + "." + str(year)
             g.db.add_post(
                 request.form['title'],
                 date,
-                request._form['text'])
-            return url_for('admin.show_admin_posts')
+                request.form['text'])
+            session['notification_active'] = True
+            session['notification_title'] = "Post created!"
+            session['notification_description'] = "Post successfully created."
+            session['notification_color'] = "success"
+            return redirect(url_for('admin.show_admin_posts'))
         else:
-            pass
+            session['notification_active'] = True
+            session['notification_title'] = "Date error!"
+            session['notification_color'] = "alert"
+            session['notification_description'] = "Please check date form\
+                twice."
     return render_template('admin/new_post.j2')
 
 
@@ -100,6 +111,7 @@ def show_admin_settings():
 
 
 @admin.route('logout')
+@login_required
 def logout():
     session.pop('logged_in', None)
     session['notification_active'] = True

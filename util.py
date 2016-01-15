@@ -1,4 +1,4 @@
-import datetime
+import calendar
 
 
 class Notification():
@@ -11,8 +11,11 @@ class Notification():
 
 
 def validate_date(day, month, year):
-    try:
-        datetime.datetime(int(year), int(month), int(day))
-    except:
-        return False
+    if month == 2:
+        if calendar.isleap(year):
+            if day > 29:
+                return False
+        else:
+            if day > 28:
+                return False
     return True

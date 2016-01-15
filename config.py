@@ -13,7 +13,7 @@ class DevConfig(object):
     """Config of whole application in production"""
     DEBUG = True
     TESTING = True
-    DATABASE = ':memory:'
+    DATABASE = '/tmp/jjblog'
     SECRET_KEY = 'very_secret_key1'
     USERNAME = 'admin'
     PASSWORD = 'admin'

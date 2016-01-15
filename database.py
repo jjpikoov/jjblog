@@ -28,18 +28,19 @@ class SqliteDatabase(Database):
             self.db.close()
 
     def init_db(self):
-        # Some logger here???
         if not os.path.isfile(self.db_file):
             self.connect_db()
-            with open('schema.sql', 'rt') as f:
+            with open('schema.sql', 'r') as f:
                 schema = f.read()
-            self.db.cursor().executescript(schema)
+                self.db.cursor().executescript(schema)
+            self.db.commit()
             self.db.close()
 
     def add_post(self, title, date, text):
         self.db.cursor().execute(
-                "INSERT INTO Posts VALUES({0}, {1}, {2})".format(
-                    title, date, text))
+                "INSERT INTO posts (title, date, text)\
+                VALUES(?, ?, ?)", [title, date, text])
+        self.db.commit()
 
     def print_posts(self):
         self.db.cursor().execute("SELECT * FROM Posts")
