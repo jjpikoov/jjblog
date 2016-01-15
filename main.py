@@ -1,6 +1,7 @@
 from flask import Flask, g, redirect, url_for
 from admin import admin
 from database import SqliteDatabase
+from util import Notification
 
 app = Flask(__name__)
 app.config.from_object('config.DevConfig')
@@ -8,6 +9,17 @@ app.config.from_object('config.DevConfig')
 
 database = SqliteDatabase(app.config['DATABASE'])
 database.init_db()
+
+# with app.app_context():
+#     g.notification = Notification()
+#     print(">>>>>")
+#     print(g.notification)
+#     print(">>>>>")
+
+
+# @app.before_first_request
+# def before_first_request():
+#     g.notification = Notification()
 
 
 @app.before_request

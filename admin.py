@@ -1,7 +1,7 @@
-import datetime
 from flask import Blueprint, render_template, request, session,\
          redirect, url_for, g
 import functools
+from util import validate_date
 
 admin = Blueprint('admin', __name__)
 
@@ -15,32 +15,24 @@ def login_required(func):
             else:
                 return func(args)
         else:
-            notification = Notification(
-                    True,
-                    "Login required!",
-                    "Please log in to continue",
-                    'warning')
-            session['notification'] = notification.__dict__
+            session['notification_active'] = True
+            session['notification_title'] = "Login required"
+            session['notification_description'] = "Please log in to continue"
+            session['notification_color'] = "warning"
             return redirect(url_for('admin.show_admin_menu_with_login'))
     return checker
 
 
-class Notification():
-    def __init__(
-            self, active=False, title=None, description=None, color=None):
-        self.active = active
-        self.title = title
-        self.description = description
-        self.color = color
-
-
-def validate_date(day, month, year):
-    try:
-        datetime.datetime(int(year), int(month), int(day))
-    except:
-        return False
-    return True
-
+def throw_notification_once(func):
+    @functools.wraps(func)
+    def wrapper(*args):
+        if args == ():
+            retval = func()
+        else:
+            retval = func(args)
+        session['notification_active'] = False
+        return retval
+    return wrapper
 
 
 @admin.record
@@ -51,28 +43,23 @@ def record_params(setup_state):
 
 
 @admin.route('/', methods=['GET', 'POST'])
+@throw_notification_once
 def show_admin_menu_with_login():
     if request.method == 'POST':
-        notification = Notification()
         if (request.form['login'] != admin.config['USERNAME'] or
                 request.form['password'] != admin.config['PASSWORD']):
-            notification.active = True
-            notification.color = 'alert'
-            notification.title = "Authorization failed!"
-            notification.description = "Wrong login or password."
+            session['notification_active'] = True
+            session['notification_color'] = 'alert'
+            session['notification_title'] = "Authorization failed!"
+            session['notification_description'] = "Wrong login or password."
         else:
             session['logged_in'] = True
-            notification.active = True
-            notification.color = 'success'
-            notification.title = 'Successful authorization!'
-            notification.description = "Welcome my admin."
-        session['notification'] = notification.__dict__
-    if 'notification' in session.keys():
-        notification = session['notification']
-        session.pop('notification', None)
-    else:
-        notification = Notification().__dict__
-    return render_template('admin/menu.j2', notification=notification)
+            session['notification_active'] = True
+            session['notification_color'] = 'success'
+            session['notification_title'] = 'Successful authorization!'
+            session['notification_description'] = "Welcome my admin."
+
+    return render_template('admin/menu.j2')
 
 
 @admin.route('posts')
@@ -115,10 +102,8 @@ def show_admin_settings():
 @admin.route('logout')
 def logout():
     session.pop('logged_in', None)
-    notification = Notification(
-            True,
-            "Successful logout!",
-            "You have successfully logged out.",
-            "secondary")
-    session['notification'] = notification.__dict__
+    session['notification_active'] = True
+    session['notification_title'] = "Successful logout!"
+    session['notification_description'] = "You have successfully logged out."
+    session['notification_color'] = "secondary"
     return redirect(url_for('admin.show_admin_menu_with_login'))
