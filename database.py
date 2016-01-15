@@ -35,3 +35,11 @@ class SqliteDatabase(Database):
                 schema = f.read()
             self.db.cursor().executescript(schema)
             self.db.close()
+
+    def add_post(self, title, date, text):
+        self.db.cursor().execute(
+                "INSERT INTO Posts VALUES({0}, {1}, {2})".format(
+                    title, date, text))
+
+    def print_posts(self):
+        self.db.cursor().execute("SELECT * FROM Posts")

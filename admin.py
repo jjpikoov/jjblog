@@ -32,6 +32,9 @@ class Notification():
         self.description = description
         self.color = color
 
+def check_date(day, month, year):
+    pass
+
 
 @admin.record
 def record_params(setup_state):
@@ -71,9 +74,13 @@ def show_admin_posts():
     return render_template('admin/posts.j2')
 
 
-@admin.route('posts/new')
+@admin.route('posts/new', methods=['GET' 'POST'])
 @login_required
 def show_new_post_forms():
+#     if request.method == 'POST':
+#         g.db.add_post(
+#                 request.form['title'],
+#                 request.form[''])
     return render_template('admin/new_post.j2')
 
 
