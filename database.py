@@ -42,5 +42,12 @@ class SqliteDatabase(Database):
                 VALUES(?, ?, ?)", [title, date, text])
         self.db.commit()
 
-    def print_posts(self):
-        self.db.cursor().execute("SELECT * FROM Posts")
+    def get_posts(self):
+#         self.db.cursor().execute(
+#                 "SELECT id, title, date, text FROM posts ORDER BY id DESC")
+        # foo = self.db.cursor().fetchmany()
+        # posts = [dict(id=row[0], title=row[1], date=row[2], text=row[3])
+        #     for row in self.db.cursor().fetchall()]
+
+        # return posts
+        return [1, 2, 3]

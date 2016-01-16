@@ -67,7 +67,8 @@ def show_admin_menu_with_login():
 @login_required
 @throw_notification_once
 def show_admin_posts():
-    return render_template('admin/posts.j2')
+    posts = g.db.get_posts()
+    return render_template('admin/posts.j2', posts=posts)
 
 
 @admin.route('posts/new', methods=['GET', 'POST'])
