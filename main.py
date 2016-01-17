@@ -1,4 +1,4 @@
-from flask import Flask, g, redirect, url_for
+from flask import Flask, g, render_template
 from admin import admin
 from database import SqliteDatabase
 
@@ -26,8 +26,8 @@ app.register_blueprint(admin, url_prefix='/admin/')
 
 @app.route('/')
 def show_blog():
-    return redirect(url_for('admin.show_admin_menu_with_login'))
-    # return render_template('blog.j2')
+    posts = g.db.get_posts()
+    return render_template('blog.j2', posts=posts)
 
 
 if __name__ == '__main__':

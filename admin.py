@@ -69,6 +69,9 @@ def show_admin_menu_with_login():
 @throw_notification_once
 def show_admin_posts():
     posts = g.db.get_posts()
+    for post in posts:
+        if len(post['text']) > 100:
+            post['text'] = post['text'][:100] + "..."
     return render_template('admin/posts.j2', posts=posts)
 
 

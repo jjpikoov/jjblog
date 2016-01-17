@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{{ config.get('BLOG_NAME', None) }}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/6.1.1/foundation.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation-icons/3.0/foundation-icons.min.css">
+  </head>
+  <body>
+    <div class="callout large primary">
+      <div class="row column text-center">
+        <h2>{{ config.get('BLOG_NAME', None) }}</h2>
+      </div>
+    </div>    
+    <div class="row" id="content">
+      <div class="medium-8 columns">
+        {% for post in posts %}
+          <div class="blog-post">
+            <h3>{{post.title}}  <small>{{post.date}}</small></h3>
+            <p>{{post.text|safe}}</p>
+          </div>
+        {% endfor %}
+      </div>
+    <div class="medium-3 columns" data-sticky-container>
+      <div class="sticky" data-sticky data-anchor="content">
+        <h4>Widget</h4>
+        <ul>
+          <li>foo</li>
+          <li>foo</li>
+        </ul>
+      </div>
+    </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/foundation/6.1.1/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+    </script>
+  </body>
+</html>
