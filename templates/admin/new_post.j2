@@ -6,24 +6,26 @@
       <legend>NEW POST</legend>
       <form method="post">
         <label for="title">Title
-          <input type="text" name="title" placeholder="Post title"></input>
+          <input type="text" name="title" {% block title_value %}placeholder="Post title"{% endblock %}>
         </label>
         <fieldset class="fieldset">
           <legend>Date</legend>
             <label for="day">Day
-              <input type="number" name="day" min="1" max="31">
+              <input type="number" name="day" min="1" max="31" {% block day_value %}{% endblock %}>
             </label> 
             <label for="month">Month
-              <input type="number" name="month" min="1" max="12">
+              <input type="number" name="month" min="1" max="12" {% block month_value %}{% endblock %}>
             </label> 
             <label for="year">Year
-              <input type="number" name="year" min="2015" max="9999">
+              <input type="number" name="year" min="2015" max="9999" {% block year_value %}{% endblock %}>
             </label> 
         </fieldset>
         <label for="text">Text
-          <textarea name="text" rows="8" cols="40"></textarea>
+          <textarea name="text" rows="8" cols="40">{% block text %}{% endblock %}</textarea>
         </label>
-        <button class="success expanded button" type="submit">Create</button>
+        <button class="success expanded button" type="submit">
+          {% block button_label %}Create{% endblock %}
+        </button>
       </form>
     </fieldset>
   </div>

@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, session,\
          redirect, url_for, g
 import functools
 from util import validate_date
+import re
 
 admin = Blueprint('admin', __name__)
 
@@ -9,11 +10,14 @@ admin = Blueprint('admin', __name__)
 def login_required(func):
     @functools.wraps(func)
     def checker(**kwargs):
+        print("@@@@")
+        print(kwargs)
+        print("@@@@")
         if 'logged_in' in session.keys() and session['logged_in']:
             if kwargs == {}:
                 return func()
             else:
-                return func(kwargs.values())
+                return func(*kwargs.values())
         else:
             session['notification_active'] = True
             session['notification_title'] = "Login required"
@@ -25,11 +29,12 @@ def login_required(func):
 
 def throw_notification_once(func):
     @functools.wraps(func)
-    def wrapper(**kwargs):
-        if kwargs == {}:
+    def wrapper(*args, **kwargs):
+        print(">>>>")
+        if args == ():
             retval = func()
         else:
-            retval = func(kwargs.values())
+            retval = func(args)
         if type(retval).__name__ == "unicode":
             session['notification_active'] = False
         return retval
@@ -104,6 +109,36 @@ def show_new_post_forms():
 def delete_post(post_id):
     g.db.delete_post(post_id)
     return redirect(url_for('admin.show_admin_posts'))
+
+
+@admin.route('posts/edit/<int:post_id>', methods=['GET', 'POST'])
+@login_required
+@throw_notification_once
+def edit_post(post_id):
+    if request.method == 'POST':
+        day = int(request.form['day'])
+        month = int(request.form['month'])
+        year = int(request.form['year'])
+        if validate_date(day, month, year):
+            date = str(day) + "." + str(month) + "." + str(year)
+            g.db.edit_post(
+                    post_id[0],
+                    request.form['title'],
+                    date,
+                    request.form['text'])
+            return redirect(url_for('admin.show_admin_posts'))
+        else:
+            session['notification_active'] = True
+            session['notification_title'] = "Date error!"
+            session['notification_color'] = "alert"
+            session['notification_description'] = "Please check date form\
+                twice."
+    post = g.db.get_post_by_id(post_id)
+    date = re.split(r'\.', post['date'])
+    post['day'] = date[0]
+    post['month'] = date[1]
+    post['year'] = date[2]
+    return render_template('admin/edit_post.j2', post=post)
 
 
 @admin.route('widgets')

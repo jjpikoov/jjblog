@@ -25,7 +25,9 @@
             <td>{{post.title}}</td>
             <td>{{post.date}}</td>
             <td>{{post.text}}</td>
-            <td> <a class="tiny button" href="">Edit</a></td>
+            <td>
+              <a class="tiny button" href="{{url_for('admin.edit_post', post_id=post.post_id)}}">Edit</a>
+            </td>
             <td>
               <a class="tiny alert button" href="{{url_for('admin.delete_post', post_id=post.post_id)}}">Delete</a>
             </td>

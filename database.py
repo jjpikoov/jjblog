@@ -54,7 +54,21 @@ class SqliteDatabase(Database):
                         title=row[1], date=row[2], text=text))
         return posts
 
+    def get_post_by_id(self, post_id):
+        for post in self.db.cursor().execute(
+                "SELECT id, title, date, text FROM posts WHERE id = ?",
+                post_id):
+            return dict(
+                    post_id=str(post[0]),
+                    title=post[1], date=post[2], text=post[3])
+
     def delete_post(self, post_id):
         self.db.cursor().execute(
                 "DELETE FROM posts WHERE id = ?", post_id)
+        self.db.commit()
+
+    def edit_post(self, post_id, title, date, text):
+        self.db.cursor().execute(
+                "UPDATE posts SET title = ?, date = ?, text = ?\
+                WHERE id = ?", [title, date, text, post_id])
         self.db.commit()
