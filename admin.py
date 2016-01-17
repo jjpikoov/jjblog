@@ -10,9 +10,6 @@ admin = Blueprint('admin', __name__)
 def login_required(func):
     @functools.wraps(func)
     def checker(**kwargs):
-        print("@@@@")
-        print(kwargs)
-        print("@@@@")
         if 'logged_in' in session.keys() and session['logged_in']:
             if kwargs == {}:
                 return func()
@@ -30,7 +27,6 @@ def login_required(func):
 def throw_notification_once(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        print(">>>>")
         if args == ():
             retval = func()
         else:

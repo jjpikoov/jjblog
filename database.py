@@ -64,7 +64,7 @@ class SqliteDatabase(Database):
 
     def delete_post(self, post_id):
         self.db.cursor().execute(
-                "DELETE FROM posts WHERE id = ?", post_id)
+                "DELETE FROM posts WHERE id = ?", str(post_id))
         self.db.commit()
 
     def edit_post(self, post_id, title, date, text):
