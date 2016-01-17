@@ -1,5 +1,7 @@
 {% extends "admin/menu.j2" %}
 {% block title %}Posts{% endblock %}
+{% block more_css %}
+{% endblock %}
 {% block posts_menu_item_attributes %}class="menu-text"{% endblock %}
 {% block body %}
 <div class="row">
@@ -7,13 +9,14 @@
     <a class="expanded button" href="{{ url_for('admin.show_new_post_forms') }}">New post</a>
   </div>
   <div class="row">
-    <table class="hover scroll">
+    <table class="">
       <thead>
         <tr>
-          <th>Id</th>
           <th>Title</th>
           <th>Date</th>
           <th>Content</th>
+          <th>Edit</th>
+          <th>Delete</th>
         </tr>
       </thead>
       <tbody>
@@ -21,11 +24,17 @@
           <tr>
             <td>{{post.title}}</td>
             <td>{{post.date}}</td>
-            <td>{{post.text|safe}}</td>
+            <td>{{post.text}}</td>
+            <td> <a class="tiny button" href="">Edit</a></td>
+            <td>
+              <a class="tiny alert button" href="{{url_for('admin.delete_post', post_id=post.post_id)}}">Delete</a>
+            </td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
 </div>
+{% endblock %}
+{% block more_scripts %}
 {% endblock %}

@@ -43,11 +43,18 @@ class SqliteDatabase(Database):
         self.db.commit()
 
     def get_posts(self):
-#         self.db.cursor().execute(
-#                 "SELECT id, title, date, text FROM posts ORDER BY id DESC")
-        # foo = self.db.cursor().fetchmany()
-        # posts = [dict(id=row[0], title=row[1], date=row[2], text=row[3])
-        #     for row in self.db.cursor().fetchall()]
+        posts = []
+        for row in self.db.cursor().execute(
+                "SELECT id, title, date, text FROM posts ORDER BY id DESC"):
+            text = row[3]
+            if len(text) > 100:
+                text = text[:100] + "..."
+            posts.append(dict(
+                        post_id=str(row[0]),
+                        title=row[1], date=row[2], text=text))
+        return posts
 
-        # return posts
-        return [1, 2, 3]
+    def delete_post(self, post_id):
+        self.db.cursor().execute(
+                "DELETE FROM posts WHERE id = ?", post_id)
+        self.db.commit()
