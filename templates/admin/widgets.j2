@@ -22,7 +22,7 @@
         {% for widget in widgets %}
           <tr>
             <td>{{widget.name}}</td>
-            <td>{{widget.body}}</td>
+            <td>{{widget.body|e}}</td>
             <td>
               <a class="tiny button" href="{{url_for('admin.edit_widget', widget_id=widget.widget_id)}}">Edit</a>
             </td>
