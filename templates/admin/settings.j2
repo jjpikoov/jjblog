@@ -1,0 +1,21 @@
+{% extends "admin/menu.j2" %}
+{% block title %}Settings{% endblock %}
+{% block more_css %}
+{% endblock %}
+{% block settings_menu_item_attributes %}class="menu-text"{% endblock %}
+{% block body %}
+<div class="row">
+  <fieldset class="small-12 medium-8 medium-centered columns fieldset">
+    <legend>Settings</legend>
+    <form method="post">
+      <label for="blog_name">Blog's name
+        <input type="text" aria-describedby="blogNameHelpText" name="blog_name" placeholder="Name of your blog">
+      </label>
+      <p class="help-text" id="blogNameHelpText">To make this change permament (resistant to system crushes and restarts) edit your config.</p>
+      <button class="success expanded button" type="submit">Save</button>
+    </form>
+  </fieldset>
+</div>
+{% endblock %}
+{% block more_scripts %}
+{% endblock %}

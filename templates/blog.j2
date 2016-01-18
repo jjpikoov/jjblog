@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation-icons/3.0/foundation-icons.min.css">
   </head>
   <body>
-    <div class="callout large primary">
+    <div class="callout medium primary">
       <div class="row column text-center">
         <h2>{{ config.get('BLOG_NAME', None) }}</h2>
       </div>
@@ -15,7 +15,7 @@
     <div class="row" id="content">
       <div class="medium-8 columns">
         {% for post in posts %}
-          <div class="blog-post">
+          <div class="blog-post bottom-space">
             <h3>{{post.title}}  <small>{{post.date}}</small></h3>
             <p>{{post.text}}</p>
           </div>
@@ -24,14 +24,21 @@
     <div class="medium-3 columns" data-sticky-container>
       <div class="sticky" data-sticky data-anchor="content">
         {% for widget in widgets %}
-          <h4>{{ widget.name }}</h4>
-          {{ widget.body}}
+          <div class="row bottom-space">
+            <h4>{{ widget.name }}</h4>
+            {{ widget.body}}
+          </div>
         {% endfor %}
       </div>
     </div>
     </div>
     <script src="https://cdn.jsdelivr.net/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/foundation/6.1.1/foundation.min.js"></script>
+    <style>
+      .bottom-space {
+           margin-bottom: 1cm;
+        }
+    </style>
     <script>
       $(document).foundation();
     </script>

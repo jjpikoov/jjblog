@@ -9,9 +9,12 @@ app.config.from_object('config.DevConfig')
 database = SqliteDatabase(app.config['DATABASE'])
 database.init_db()
 
+app.register_blueprint(admin, url_prefix='/admin/')
+
 
 @app.before_request
 def before_request():
+    app.config['BLOG_NAME'] = admin.config['BLOG_NAME']
     g.db = database
     g.db.connect_db()
 
@@ -20,8 +23,6 @@ def before_request():
 def teardown_request(exception):
     db = getattr(g, 'db', None)
     db.close_db()
-
-app.register_blueprint(admin, url_prefix='/admin/')
 
 
 @app.route('/')

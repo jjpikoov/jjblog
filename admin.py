@@ -189,10 +189,13 @@ def edit_widget(widget_id):
     return render_template('admin/edit_widget.j2', widget=widget)
 
 
-@admin.route('settings')
+@admin.route('settings', methods=['GET', 'POST'])
 @login_required
 def show_admin_settings():
-    return "Admin settings"
+    if request.method == 'POST':
+        admin.config['BLOG_NAME'] = request.form['blog_name']
+        return redirect(url_for('admin.show_admin_settings'))
+    return render_template('admin/settings.j2')
 
 
 @admin.route('logout')
