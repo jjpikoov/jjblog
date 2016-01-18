@@ -9,6 +9,6 @@ create table posts (
 drop table if exists widgets;
 create table widgets (
         id integer primary key autoincrement,
-        position integer,
+        name text,
         body text
         );

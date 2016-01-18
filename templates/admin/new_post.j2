@@ -3,7 +3,7 @@
 {% block body %}
   <div class="row">
     <fieldset class="small-12 medium-8 medium-centered columns fieldset">
-      <legend>NEW POST</legend>
+      <legend>{% block legend %}NEW POST{% endblock %}</legend>
       <form method="post">
         <label for="title">Title
           <input type="text" name="title" {% block title_value %}placeholder="Post title"{% endblock %}>

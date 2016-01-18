@@ -1,0 +1,8 @@
+{% extends "admin/new_widget.j2" %}
+{% block title %}Edit widget{% endblock %}
+{% block legend %}EDIT WIDGET{% endblock %}
+{% block name_value %}value="{{widget.name}}"{% endblock %}
+{% block body_text %}
+{{widget.body}}  
+{% endblock %}
+{% block button_label %}Edit{% endblock %}

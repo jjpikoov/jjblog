@@ -27,7 +27,8 @@ app.register_blueprint(admin, url_prefix='/admin/')
 @app.route('/')
 def show_blog():
     posts = g.db.get_posts()
-    return render_template('blog.j2', posts=posts)
+    widgets = g.db.get_widgets()
+    return render_template('blog.j2', posts=posts, widgets=widgets)
 
 
 if __name__ == '__main__':

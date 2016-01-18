@@ -1,0 +1,20 @@
+{% extends "admin/widgets.j2" %}
+{% block title %}New widget{% endblock %}
+{% block body %}
+  <div class="row">
+    <fieldset class="small-12 medium-8 medium-centered columns fieldset">
+      <legend>{%block legend %}NEW WIDGET{% endblock %}</legend>
+      <form method="post">
+        <label for="title">Name
+          <input type="text" name="name" {% block name_value %}placeholder="Widget name"{% endblock %}>
+        </label>
+        <label for="text">Body
+          <textarea name="body" rows="8" cols="40">{% block body_text %}{% endblock %}</textarea>
+        </label>
+        <button class="success expanded button" type="submit">
+          {% block button_label %}Create{% endblock %}
+        </button>
+      </form>
+    </fieldset>
+  </div>
+{% endblock %}

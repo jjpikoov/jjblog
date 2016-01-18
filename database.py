@@ -69,3 +69,37 @@ class SqliteDatabase(Database):
                 "UPDATE posts SET title = ?, date = ?, text = ?\
                 WHERE id = ?", [title, date, text, post_id])
         self.db.commit()
+
+    def add_widget(self, name, body):
+        self.db.cursor().execute(
+                "INSERT INTO widgets (name, body)\
+                VALUES(?, ?)", [name, body])
+        self.db.commit()
+
+    def get_widgets(self):
+        widgets = []
+        for row in self.db.cursor().execute(
+                "SELECT id, name, body FROM widgets"):
+            widgets.append(dict(
+                        widget_id=str(row[0]),
+                        name=row[1], body=row[2]))
+        return widgets
+
+    def get_widget_by_id(self, widget_id):
+        for widget in self.db.cursor().execute(
+                "SELECT id, name, body FROM widgets WHERE id = ?",
+                widget_id):
+            return dict(
+                    widget_id=str(widget[0]),
+                    name=widget[1], body=widget[2])
+
+    def delete_widget(self, widget_id):
+        self.db.cursor().execute(
+                "DELETE FROM widgets WHERE id = ?", str(widget_id))
+        self.db.commit()
+
+    def edit_widget(self, widget_id, name, body):
+        self.db.cursor().execute(
+                "UPDATE widgets SET name = ?, body = ?\
+                WHERE id = ?", [name, body, widget_id])
+        self.db.commit()

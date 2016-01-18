@@ -142,8 +142,51 @@ def edit_post(post_id):
 
 @admin.route('widgets')
 @login_required
+@throw_notification_once
 def show_admin_widgets():
-    return "Admin widgets"
+    widgets = g.db.get_widgets()
+    for widget in widgets:
+        if len(widget['body']) > 100:
+            widget['body'] = widget['body'][:100] + "..."
+    return render_template('admin/widgets.j2', widgets=widgets)
+
+
+@admin.route('widgets/new', methods=['GET', 'POST'])
+@login_required
+@throw_notification_once
+def show_new_widget_forms():
+    if request.method == 'POST':
+        g.db.add_widget(
+                request.form['name'],
+                request.form['body'])
+
+        session['notification_active'] = True
+        session['notification_title'] = "Widget  created!"
+        session['notification_description'] = "Widget successfully created."
+        session['notification_color'] = "success"
+        return redirect(url_for('admin.show_admin_widgets'))
+    return render_template('admin/new_widget.j2')
+
+
+@admin.route('widgets/delete/<int:widget_id>')
+@login_required
+def delete_widget(widget_id):
+    g.db.delete_widget(widget_id)
+    return redirect(url_for('admin.show_admin_widgets'))
+
+
+@admin.route('widgets/edit/<int:widget_id>', methods=['GET', 'POST'])
+@login_required
+@throw_notification_once
+def edit_widget(widget_id):
+    if request.method == 'POST':
+        g.db.edit_widget(
+                    widget_id[0],
+                    request.form['name'],
+                    request.form['body'])
+        return redirect(url_for('admin.show_admin_widgets'))
+    widget = g.db.get_widget_by_id(widget_id)
+    return render_template('admin/edit_widget.j2', widget=widget)
 
 
 @admin.route('settings')
