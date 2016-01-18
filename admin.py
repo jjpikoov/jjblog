@@ -191,9 +191,15 @@ def edit_widget(widget_id):
 
 @admin.route('settings', methods=['GET', 'POST'])
 @login_required
+@throw_notification_once
 def show_admin_settings():
     if request.method == 'POST':
         admin.config['BLOG_NAME'] = request.form['blog_name']
+        session['notification_active'] = True
+        session['notification_title'] = "Name changed!"
+        session['notification_description'] = "Name\
+            has been successfully changed."
+        session['notification_color'] = "success"
         return redirect(url_for('admin.show_admin_settings'))
     return render_template('admin/settings.j2')
 
