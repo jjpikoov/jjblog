@@ -8,6 +8,10 @@ admin = Blueprint('admin', __name__)
 
 
 def login_required(func):
+    """
+    Decorator which redirect to admin's menu page
+    if user is not logged in.
+    """
     @functools.wraps(func)
     def checker(**kwargs):
         if 'logged_in' in session.keys() and session['logged_in']:
@@ -17,14 +21,18 @@ def login_required(func):
                 return func(*kwargs.values())
         else:
             session['notification_active'] = True
-            session['notification_title'] = "Login required"
-            session['notification_description'] = "Please log in to continue"
+            session['notification_title'] = "Login required!"
+            session['notification_description'] = "Please log in to continue."
             session['notification_color'] = "warning"
             return redirect(url_for('admin.show_admin_menu_with_login'))
     return checker
 
 
 def throw_notification_once(func):
+    """
+    Decorator which executes given function and after that
+    sets session's notifcation to non-active.
+    """
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         if args == ():
@@ -39,6 +47,9 @@ def throw_notification_once(func):
 
 @admin.record
 def record_params(setup_state):
+    """
+    Function copies config from app to admin object.
+    """
     app = setup_state.app
     admin.config = dict(
             [(key, value) for (key, value) in app.config.iteritems()])
@@ -47,6 +58,9 @@ def record_params(setup_state):
 @admin.route('/', methods=['GET', 'POST'])
 @throw_notification_once
 def show_admin_menu_with_login():
+    """
+    Main function for "host/admin/
+    """
     if request.method == 'POST':
         if (request.form['login'] != admin.config['USERNAME'] or
                 request.form['password'] != admin.config['PASSWORD']):
@@ -68,6 +82,10 @@ def show_admin_menu_with_login():
 @login_required
 @throw_notification_once
 def show_admin_posts():
+    """
+    Function for "host/admin/posts".
+    Shows all posts.
+    """
     posts = g.db.get_posts()
     for post in posts:
         if len(post['text']) > 100:
@@ -79,6 +97,10 @@ def show_admin_posts():
 @login_required
 @throw_notification_once
 def show_new_post_forms():
+    """
+    Function for "host/admin/posts/new".
+    Creator of new posts.
+    """
     if request.method == 'POST':
         day = int(request.form['day'])
         month = int(request.form['month'])
@@ -106,6 +128,9 @@ def show_new_post_forms():
 @admin.route('posts/delete/<int:post_id>')
 @login_required
 def delete_post(post_id):
+    """
+    Function for deleting post with given post_id.
+    """
     g.db.delete_post(post_id)
     return redirect(url_for('admin.show_admin_posts'))
 
@@ -114,6 +139,9 @@ def delete_post(post_id):
 @login_required
 @throw_notification_once
 def edit_post(post_id):
+    """
+    Function for editing existing post.
+    """
     if request.method == 'POST':
         day = int(request.form['day'])
         month = int(request.form['month'])
@@ -144,6 +172,10 @@ def edit_post(post_id):
 @login_required
 @throw_notification_once
 def show_admin_widgets():
+    """
+    Function for "host/admin/widgets".
+    Shows all widgets.
+    """
     widgets = g.db.get_widgets()
     for widget in widgets:
         if len(widget['body']) > 100:
@@ -155,6 +187,10 @@ def show_admin_widgets():
 @login_required
 @throw_notification_once
 def show_new_widget_forms():
+    """
+    Function for "host/admin/widgets/new".
+    Creator of new widgets.
+    """
     if request.method == 'POST':
         g.db.add_widget(
                 request.form['name'],
@@ -171,6 +207,9 @@ def show_new_widget_forms():
 @admin.route('widgets/delete/<int:widget_id>')
 @login_required
 def delete_widget(widget_id):
+    """
+    Function for deleting widget with given widget_id.
+    """
     g.db.delete_widget(widget_id)
     return redirect(url_for('admin.show_admin_widgets'))
 
@@ -179,6 +218,9 @@ def delete_widget(widget_id):
 @login_required
 @throw_notification_once
 def edit_widget(widget_id):
+    """
+    Function for editing existing widget.
+    """
     if request.method == 'POST':
         g.db.edit_widget(
                     widget_id[0],
@@ -193,6 +235,10 @@ def edit_widget(widget_id):
 @login_required
 @throw_notification_once
 def show_admin_settings():
+    """
+    Function for "/admin/settings".
+    Shows all avaiable blog's settings.
+    """
     if request.method == 'POST':
         admin.config['BLOG_NAME'] = request.form['blog_name']
         session['notification_active'] = True
@@ -207,6 +253,9 @@ def show_admin_settings():
 @admin.route('logout')
 @login_required
 def logout():
+    """
+    Functions loggs out user and change notification.
+    """
     session.pop('logged_in', None)
     session['notification_active'] = True
     session['notification_title'] = "Successful logout!"

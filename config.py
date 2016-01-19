@@ -1,5 +1,5 @@
 class ProductionConfig(object):
-    """Config of whole application in production"""
+    """Config for whole application in production"""
     DEBUG = False
     TESTING = False
     DATABASE = ''  # set sqlite db file you want
@@ -10,7 +10,7 @@ class ProductionConfig(object):
 
 
 class DevConfig(object):
-    """Config of whole application in production"""
+    """Config for whole application in production"""
     DEBUG = True
     TESTING = True
     DATABASE = '/tmp/jjblog'
