@@ -1,4 +1,4 @@
-{% extends "admin/new_post.j2" %}
+{% extends "admin/new_post.djhtml" %}
 {% block title %}Edit post{% endblock %}
 {% block legend %}EDIT POST{% endblock %}
 {% block title_value %}value="{{post.title}}"{% endblock %}

@@ -1,4 +1,4 @@
-{% extends "admin/new_widget.j2" %}
+{% extends "admin/new_widget.djhtml" %}
 {% block title %}Edit widget{% endblock %}
 {% block legend %}EDIT WIDGET{% endblock %}
 {% block name_value %}value="{{widget.name}}"{% endblock %}

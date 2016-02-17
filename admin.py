@@ -1,8 +1,11 @@
-from flask import Blueprint, render_template, request, session,\
-         redirect, url_for, g
-import functools
-from util import validate_date
 import re
+
+from flask import Blueprint, g, redirect, render_template, request, session, \
+    url_for
+from util import validate_date
+
+import functools
+
 
 admin = Blueprint('admin', __name__)
 
@@ -75,7 +78,7 @@ def show_admin_menu_with_login():
             session['notification_title'] = 'Successful authorization!'
             session['notification_description'] = "Welcome my admin."
 
-    return render_template('admin/menu.j2')
+    return render_template('admin/menu.djhtml')
 
 
 @admin.route('posts')
@@ -90,7 +93,7 @@ def show_admin_posts():
     for post in posts:
         if len(post['text']) > 100:
             post['text'] = post['text'][:100] + "..."
-    return render_template('admin/posts.j2', posts=posts)
+    return render_template('admin/posts.djhtml', posts=posts)
 
 
 @admin.route('posts/new', methods=['GET', 'POST'])
@@ -122,7 +125,7 @@ def show_new_post_forms():
             session['notification_color'] = "alert"
             session['notification_description'] = "Please check date form\
                 twice."
-    return render_template('admin/new_post.j2')
+    return render_template('admin/new_post.djhtml')
 
 
 @admin.route('posts/delete/<int:post_id>')
@@ -165,7 +168,7 @@ def edit_post(post_id):
     post['day'] = date[0]
     post['month'] = date[1]
     post['year'] = date[2]
-    return render_template('admin/edit_post.j2', post=post)
+    return render_template('admin/edit_post.djhtml', post=post)
 
 
 @admin.route('widgets')
@@ -180,7 +183,7 @@ def show_admin_widgets():
     for widget in widgets:
         if len(widget['body']) > 100:
             widget['body'] = widget['body'][:100] + "..."
-    return render_template('admin/widgets.j2', widgets=widgets)
+    return render_template('admin/widgets.djhtml', widgets=widgets)
 
 
 @admin.route('widgets/new', methods=['GET', 'POST'])
@@ -201,7 +204,7 @@ def show_new_widget_forms():
         session['notification_description'] = "Widget successfully created."
         session['notification_color'] = "success"
         return redirect(url_for('admin.show_admin_widgets'))
-    return render_template('admin/new_widget.j2')
+    return render_template('admin/new_widget.djhtml')
 
 
 @admin.route('widgets/delete/<int:widget_id>')
@@ -228,7 +231,7 @@ def edit_widget(widget_id):
                     request.form['body'])
         return redirect(url_for('admin.show_admin_widgets'))
     widget = g.db.get_widget_by_id(widget_id)
-    return render_template('admin/edit_widget.j2', widget=widget)
+    return render_template('admin/edit_widget.djhtml', widget=widget)
 
 
 @admin.route('settings', methods=['GET', 'POST'])
@@ -247,7 +250,7 @@ def show_admin_settings():
             has been successfully changed."
         session['notification_color'] = "success"
         return redirect(url_for('admin.show_admin_settings'))
-    return render_template('admin/settings.j2')
+    return render_template('admin/settings.djhtml')
 
 
 @admin.route('logout')

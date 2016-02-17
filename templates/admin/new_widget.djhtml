@@ -1,4 +1,4 @@
-{% extends "admin/widgets.j2" %}
+{% extends "admin/widgets.djhtml" %}
 {% block title %}New widget{% endblock %}
 {% block body %}
   <div class="row">

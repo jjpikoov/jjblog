@@ -1,4 +1,4 @@
-{% extends "admin/posts.j2" %}
+{% extends "admin/posts.djhtml" %}
 {% block title %}New post{% endblock %}
 {% block body %}
   <div class="row">

@@ -1,4 +1,4 @@
-{% extends "admin/menu.j2" %}
+{% extends "admin/menu.djhtml" %}
 {% block title %}Posts{% endblock %}
 {% block more_css %}
 {% endblock %}

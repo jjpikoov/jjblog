@@ -39,7 +39,7 @@ def show_blog():
     """
     posts = g.db.get_posts()
     widgets = g.db.get_widgets()
-    return render_template('blog.j2', posts=posts, widgets=widgets)
+    return render_template('blog.djhtml', posts=posts, widgets=widgets)
 
 
 if __name__ == '__main__':
